@@ -1,0 +1,121 @@
+﻿Using System
+Using System.Collections
+Using System.Text
+
+BegClass Program
+
+	BegSr Main Shared(*Yes) Access(*Public) Attributes(System.STAThread())
+		DclSrParm args Type(*String) Rank(1)
+
+		DclFld t Type(Test) New()
+
+		t.Run()
+		Console.WriteLine('Press any key to end') 
+		Console.ReadKey() 
+
+	EndSr
+
+EndClass
+
+BegClass Test
+
+	BegSr Run Access(*Public) 
+		//Numbers()
+		//StringDataTypes()
+		WorkWithDates()
+	EndSr
+
+	BegSr Numbers 
+		DclFld Balance1 Type(*Packed) Len(12,2) 
+		DclFld Balance2 Type(*Zoned) Len(12,2) 
+
+		Balance1 = 4512345.78
+
+		DclFld Counter1 Type(*Integer4) 
+		DclFld Counter2 Type(*Integer8)
+
+		Counter2 = Counter1.MaxValue
+		Counter2 = Counter2.MaxValue
+
+		DclFld FormattedBalance Type(*String) 
+
+		DclConst CHECK_FORMAT Value("#,###.00;(#,###.00);N/A")
+
+		Balance1 = 4512345.78
+		FormattedBalance = Balance1.ToString(CHECK_FORMAT)
+		Balance1 = -4512345.78
+		FormattedBalance = Balance1.ToString("#,###.00;(#,###.00);N/A")
+		Balance1 = 0
+		FormattedBalance = Balance1.ToString("#,###.00;(#,###.00);N/A")
+	EndSr 
+
+	BegSr StringDataTypes
+		DclFld CustomerName1 Type(*Char) Len(30)
+		DclFld CustomerName2 Type(*Char) Len(30)
+		DclFld CustomerName3 Type(*String)
+
+		CustomerName1  = 'Neil'
+		CustomerName2  = 'Young'
+
+		CustomerName3 = CustomerName1
+
+		DclFld worker Type(*Integer4) 
+
+		worker = %LEN(CustomerName1)
+		worker = CustomerName1.Length 
+	EndSr
+
+	BegSr WorkWithDates
+		DclFld NumericDate Type(*Zoned) Len(8,0)
+		DclFld InvoiceDate Type(DateTime) 
+		DclFld Today Type(DateTime) 
+		DclFld ts Type(TimeSpan) 
+
+		DclConst ISODATE Value("yyyy-MM-dd") 
+
+		NumericDate = 20230402
+		Console.WriteLine(NumericDate.ToString("0000-00-00")) 
+
+		// Convert to date inline.
+		InvoiceDate = DateTime.Parse(NumericDate.ToString("0000-00-00"))
+
+		// Convert to date with a function.
+		InvoiceDate = ConvertNumericDateToDate(NumericDate) 
+		
+		// Uncomment the two lines below to cause an error.
+		NumericDate = 20230477
+		InvoiceDate = ConvertNumericDateToDate(NumericDate) 
+
+		Console.WriteLine(InvoiceDate.ToString(ISODATE)) 
+		Console.WriteLine(InvoiceDate.ToString("MMMM dd, yyyy")) 
+		Console.WriteLine(InvoiceDate.ToString("yyyy-MMM-dd")) 
+
+		Today = DateTime.Now
+		ts = Today.Subtract(InvoiceDate) 
+		Console.WriteLine(ts.Days) 
+
+		InvoiceDate = InvoiceDate.AddDays(14) 
+
+		NumericDate = InvoiceDate.ToString("yyyyMMdd") 
+	EndSr
+
+	BegFunc ConvertNumericDateToDate Type(DateTime) 
+		DclSrParm NumericDate Type(*Zoned) Len(8,0)
+
+		DclFld Result Type(DateTime) 
+
+		Try 
+			Result = DateTime.Parse(NumericDate.ToString("0000-00-00")) 
+		Catch ex Type(Exception) 
+			Console.WriteLine(ex.Message) 	
+			Console.WriteLine('A fatal error occurred. Press any key to end') 
+			Console.ReadKey() 
+			Environment.Exit(0)			
+		EndTry 
+
+		LeaveSr Result 
+	EndFunc 
+
+
+EndClass 
+
